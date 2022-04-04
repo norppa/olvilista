@@ -36,6 +36,6 @@ router.delete('/api', upload.none(), (req, res) => {
 })
 
 
-router.use('/', express.static('./client/dist'))
+router.use('/', express.static(process.env.OLVILISTA_DIST))
 
 export default router
