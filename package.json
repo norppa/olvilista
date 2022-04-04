@@ -1,0 +1,27 @@
+{
+  "name": "olvilista",
+  "version": "1.0.0",
+  "description": "Miniäppi oluiden arviointiin",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/norppa/olvilista.git"
+  },
+  "author": "Jari Haavisto",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^7.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "multer": "^1.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

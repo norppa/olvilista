@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Moonrocks&display=swap');
+
+html {
+    box-sizing: border-box;
+    background-image: url('./assets/background3.jpg');
+    background-color: aliceblue;
+    background-size: 100vw 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}

@@ -1,0 +1,108 @@
+#OlviLista {
+    text-align: center;
+}
+
+#addButton {
+    width: 400px;
+    display: block;
+    margin: 0 auto 20px auto;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+
+.olvit {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.Olvi {
+    display: inline-block;
+    width: 360px;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 5px;
+    background-color: white;
+}
+
+.Olvi img {
+    max-width: 340px;
+    border-radius: inherit;
+}
+
+.Image.selector {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    background-image: url('./assets/beerbw.png');
+    background-size: 150px;
+    cursor: pointer;
+}
+
+.Image.selector:hover {
+    background-image: url('./assets/beer.png');
+}
+
+.Editor {
+    display: flex;
+    flex-direction: column;
+    max-width: 660px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+    border-radius: 30px;
+    background-color: rgba(0,0,0,0.8);
+    padding: 30px;
+}
+
+.Editor .Image {
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+.Editor .Image .close {
+    cursor: pointer;
+    position: relative;
+    display: block;
+    border-radius: 20px;
+    top: 20px;
+    left: -20px;
+    font-size: 40px;
+    background-color: white;
+}
+
+.Editor .Image img {
+    border-radius: 15px;
+    max-width: 600px;
+    max-height: 600px;
+}
+
+.Editor input, textarea {
+    width: 100%;
+    padding: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12pt;
+}
+
+.Editor button {
+    margin-top: 20px;
+    width: 100px;
+}
+
+h1 {
+    font-variant: small-caps;
+    font-size: 80pt;
+    font-family: 'Rubik Moonrocks', cursive;
+    margin: 0;
+
+  text-shadow: 3px 3px 6px white;
+}
