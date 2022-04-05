@@ -6,6 +6,7 @@ import router from './router.js'
 
 const server = express()
 server.use(cors())
+server.use(express.json())
 
 server.use('/olvilista', router)
 

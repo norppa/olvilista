@@ -1,56 +1,101 @@
 
 import { useEffect, useState } from 'react'
 import ImageSelector from './ImageSelector'
-import { addReview, updateReview, deleteReview } from './api'
+import { saveBeer, updateBeer, deleteBeer, getUsers } from './api'
 
 const Editor = (props) => {
 
     const [image, setImage] = useState(null)
     const [imageUpdated, setImageUpdated] = useState(false)
-    const [subject, setSubject] = useState('')
-    const [review, setReview] = useState('')
 
-    useEffect(() => {
+    const [beer, setBeer] = useState('')
+    const [comment, setComment] = useState({comment: ''})
+    const [users, setUsers] = useState([])
+    const [selectedUserId, setSelectedUserId] = useState(null)
+
+    useEffect(async () => {
         setImage(props.existing?.image || null)
-        setSubject(props.existing?.subject || '')
-        setReview(props.existing?.review || '')
+        setBeer(props.existing?.beer || '')
+
+        const users = await getUsers()
+        setUsers(users)
+        const userId = localStorage.getItem('@OlvilistaUser')
+        const user = users.find(user => user.id == userId)
+        if (users) {
+            setSelectedUserId(userId)
+            const selectedUserComment = props.existing.comments.find(comment => comment.user.id == userId)
+            setComment(selectedUserComment ? selectedUserComment : { comment: '', user })
+        } else if (props.existing) {
+            setSelectedUserId(props.existing.comments[0].user.id)
+            setComment(props.existing.comments[0])
+        }
     }, [])
 
-    useEffect(() => setImageUpdated(true), [image])
+    const updateImage = (image) => {
+        setImageUpdated(true)
+        setImage(image)
+    }
 
     const onSubmitClick = async () => {
-        let formData = new FormData()
-        formData.set('id', props.existing?.id)
-        formData.set('subject', subject)
-        formData.set('review', review)
-        if (imageUpdated) formData.append('file', image)
+        if (selectedUserId === null) return alert('Valitse kuka sä oot!')
+        if (beer === '') return alert('Muista otsikko!')
+        if (comment.comment === '') return alert('Et voi jättää tyhjää kommenttia.')
 
-        const result = props.existing ? await updateReview(formData) : await addReview(formData)
+        const result = props.existing ? await update() : await create()
         if (result.error) return console.error(result.error)
         props.close()
     }
 
+    const create = () => saveBeer(beer, image, selectedUserId, comment.comment)
+
+    const update = async () => {
+        const beerId = props.existing.id
+        const beerValue = beer !== props.existing.beer ? beer : undefined
+        const imageValue = image !== props.existing.image ? image : undefined
+
+        const oldComment = props.existing.comments.find(comment => comment.user.id == selectedUserId)
+        const commentValue = comment.comment !== oldComment?.comment ? comment.comment : undefined
+        const commentId = (commentValue === undefined || oldComment === undefined) ? undefined : oldComment.id
+
+        return await updateBeer(beerId, beerValue, imageValue, commentId, selectedUserId, commentValue)
+    }
+
     const onRemoveClick = async () => {
-        const confirm = window.confirm('Haluatko varmasti poistaa tämän arvostelun?')
+        const confirm = window.confirm('Haluatko varmasti poistaa tämän oluen ja kaikki siihen liittyvät kommentit?')
         if (confirm) {
-            let formData = new FormData()
-            formData.set('id', props.existing?.id)
-            await deleteReview(formData)
+            await deleteBeer(props.existing.id)
             props.close()
+        }
+    }
+
+    const onSelectUser = (user) => () => {
+        localStorage.setItem('@OlvilistaUser', JSON.stringify(user.id))
+        setSelectedUserId(user.id)
+        if (props.existing) {
+            const selectedUserComment = props.existing.comments.find(comment => comment.user.id == user.id)
+            setComment(selectedUserComment ? selectedUserComment : { comment: '', user })
         }
     }
 
     return (
         <div className='Editor'>
-            <ImageSelector image={image} setImage={setImage} />
+            <ImageSelector image={image} setImage={updateImage} />
             <input type='text'
-                value={subject}
-                onChange={(event) => setSubject(event.target.value)}
-                placeholder='Mistä juomasta oli kyse?' />
-            <textarea value={review}
-                onChange={(event) => setReview(event.target.value)}
-                placeholder='Ja miltä se maistui?'
+                value={beer}
+                onChange={(event) => setBeer(event.target.value)}
+                placeholder='Osuva otsikko' />
+            <textarea value={comment.comment}
+                onChange={(event) => setComment(oldcomment => ({ ...oldcomment, comment: event.target.value }))}
+                placeholder='Kaunis kuvaus'
                 rows={10} />
+            <div className='users'>
+                {users.map(user => (
+                    <button key={`user${user.id}`} className={'userTag' + (selectedUserId == user.id ? ' selected' : '')}
+                        style={{ backgroundColor: user.color }}
+                        onClick={onSelectUser(user)}>
+                        {user.user}
+                    </button>))}
+            </div>
             <div>
                 {props.existing && <button onClick={onRemoveClick}>Poista</button>}
                 <button onClick={props.close}>Peruuta</button>

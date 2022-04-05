@@ -12,15 +12,14 @@ h1, h2 {
     text-align: center;
 }
 
-
-.olvit {
+.beers {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
-.Olvi {
+.beer {
     display: inline-block;
     width: 360px;
     border: 1px solid black;
@@ -31,9 +30,31 @@ h1, h2 {
     background-color: white;
 }
 
-.Olvi img {
+.beer img {
     max-width: 340px;
     border-radius: inherit;
+}
+
+.beer p {
+    text-align: left;
+}
+
+.beer .beerImgPlaceholder {
+    width: 100px;
+    margin: 175px 120px; 
+}
+
+.userIcon {
+    display: inline-block;
+    text-align: center;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 5px;
 }
 
 .Image.selector {
@@ -96,6 +117,21 @@ h1, h2 {
 .Editor button {
     margin-top: 20px;
     width: 100px;
+}
+
+.Editor .userTag {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 20pt;
+    padding: 4px;
+    border: 1px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.Editor .userTag.selected {
+    border: 3px solid white;
 }
 
 h1 {

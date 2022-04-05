@@ -14,7 +14,7 @@ const ImageSelector = ({ image, setImage }) => {
             <input type='file' ref={imageUploadRef} onChange={onChange} style={{ display: 'none' }} />
         </label>
     )
-    const src = typeof image === 'string' ? image : URL.createObjectURL(image)
+    const src = typeof image === 'string' ? `data:image/*;base64,${image}` : URL.createObjectURL(image)
 
     if (image) return (
         <div className='Image'>

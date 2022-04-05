@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Editor from './Editor'
 
-import { getReviews } from './api'
+import { getBeers } from './api'
+import beerImg from './assets/beer.png'
 import './OlviLista.css'
 
 const Pages = { MAIN: 'MAIN', EDITOR: 'EDITOR' }
 
 const BrewReport = () => {
   const [page, setPage] = useState(Pages.MAIN)
-  const [reviews, setReviews] = useState([])
+  const [beers, setBeers] = useState([])
   const [editee, setEditee] = useState(null)
+  const ref = useRef(null)
 
   useEffect(() => {
     initialize()
@@ -18,22 +20,21 @@ const BrewReport = () => {
   }, [])
 
   const dblclick = (event) => {
-    const reviewDiv = event.target.closest('.Olvi')
-    if (!reviewDiv) return null
+    const beerDiv = event.target.closest('.beer')
+    if (!beerDiv) return null
 
-    const id = Number(reviewDiv.id)
-    const image = reviewDiv.children[0].src
-    const subject = reviewDiv.children[1].innerHTML
-    const review = reviewDiv.children[2].innerHTML
+    const beerId = Number(beerDiv.id)
+    const beer = ref.current.find(beer => beer.id == beerId)
 
-    setEditee({ id, image, subject, review })
+    setEditee(beer)
     setPage(Pages.EDITOR)
   }
 
   const initialize = async () => {
-    const reviews = await getReviews()
-    if (reviews.error) return console.error(reviews.error)
-    setReviews(reviews)
+    const beers = await getBeers()
+    if (beers.error) return console.error(beers.error)
+    ref.current = beers
+    setBeers(beers)
     setEditee(null)
   }
 
@@ -48,12 +49,20 @@ const BrewReport = () => {
     <div id='OlviLista'>
       <h1>Olvilista</h1>
       <button id='addButton' onClick={() => setPage(Pages.EDITOR)}>Lisää uusi arvostelu</button>
-      <div className='olvit'>
-        {reviews.map(review => {
-          return <div key={review.id} id={review.id} className='Olvi'>
-            <img src={`data:image/*;base64,${review.image}`} />
-            <h2>{review.subject}</h2>
-            <p>{review.review}</p>
+      <div className='beers'>
+        {beers.map(beer => {
+          return <div key={beer.id} id={beer.id} className='beer'>
+            {beer.image
+              ? <img src={`data:image/*;base64,${beer.image}`} />
+              : <img src={beerImg} className='beerImgPlaceholder' />}
+
+            <h2>{beer.beer}</h2>
+            {beer.comments.map(({ id, user, comment }) => <p key={`comment${id}`}>
+              <span className='userIcon' style={{ backgroundColor: user.color }}>
+                {user.user.substring(0, 1).toUpperCase()}
+              </span>
+              {comment}
+            </p>)}
           </div>
         })}
       </div>
