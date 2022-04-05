@@ -7,6 +7,15 @@ import './OlviLista.css'
 
 const Pages = { MAIN: 'MAIN', EDITOR: 'EDITOR' }
 
+const toDateString = (date) => {
+  let day = date.substring(8, 10)
+  let month = date.substring(5, 7)
+  let year = date.substring(0, 4)
+  if (day.charAt(0) === '0') day = day.substring(1)
+  if (month.charAt(0) === '0') month = month.substring(1)
+  return `${day}.${month}.${year}`
+}
+
 const BrewReport = () => {
   const [page, setPage] = useState(Pages.MAIN)
   const [beers, setBeers] = useState([])
@@ -57,11 +66,15 @@ const BrewReport = () => {
               : <img src={beerImg} className='beerImgPlaceholder' />}
 
             <h2>{beer.beer}</h2>
-            {beer.comments.map(({ id, user, comment }) => <p key={`comment${id}`}>
-              <span className='userIcon' style={{ backgroundColor: user.color }}>
-                {user.user.substring(0, 1).toUpperCase()}
-              </span>
+            {beer.comments.map(({ id, user, comment, date }) => <p key={`comment${id}`}>
               {comment}
+              <div className='commentSignature'>
+                &#8226;
+                <span className='userTag' style={{ backgroundColor: user.color }}>
+                  {user.user.toUpperCase()}
+                </span>
+                {toDateString(date)}
+              </div>
             </p>)}
           </div>
         })}

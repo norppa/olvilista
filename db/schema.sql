@@ -18,6 +18,7 @@ CREATE TABLE comments (
     beer_id INTEGER,
     user_id INTEGER,
     comment TEXT,
+    date TEXT,
     FOREIGN KEY (beer_id) REFERENCES beers(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

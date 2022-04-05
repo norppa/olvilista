@@ -8,7 +8,7 @@ const upload = multer({ storage: multer.memoryStorage() })
 const router = express.Router()
 
 router.get('/api', (req, res) => {
-    const result = db.prepare('SELECT b.id AS beerId, beer, image, c.id AS commentId, user_id, user, color, comment FROM beers AS b LEFT JOIN comments AS c ON c.beer_id = b.id LEFT JOIN users AS u ON u.id = c.user_id').all()
+    const result = db.prepare('SELECT b.id AS beerId, beer, image, c.id AS commentId, user_id, user, color, comment, date FROM beers AS b LEFT JOIN comments AS c ON c.beer_id = b.id LEFT JOIN users AS u ON u.id = c.user_id').all()
 
     const beersWithComments = result.reduce((acc, cur) => {
         const beer = acc[cur.beerId] || {
@@ -20,7 +20,8 @@ router.get('/api', (req, res) => {
         beer.comments.push({
             id: cur.commentId,
             comment: cur.comment,
-            user: { id: cur.user_id, user: cur.user, color: cur.color }
+            user: { id: cur.user_id, user: cur.user, color: cur.color },
+            date: cur.date
         })
         return { ...acc, [cur.beerId]: beer }
     }, {})
@@ -62,7 +63,8 @@ const updateBeer = (beerId, beer, image) => {
 }
 
 const createComment = (comment, beerId, userId) => {
-    return db.prepare('INSERT INTO comments (beer_id, user_id, comment) VALUES (?,?,?)').run(beerId, userId, comment)
+    return db.prepare('INSERT INTO comments (beer_id, user_id, comment, date) VALUES (?,?,?,?)')
+        .run(beerId, userId, comment, (new Date()).toISOString().substring(0, 10))
 }
 
 const updateComment = (comment, commentId) => {
@@ -80,6 +82,6 @@ router.get('/api/users', (req, res) => {
 })
 
 
-router.use('/', express.static('client/dist'))
+router.use('/', express.static(process.env.OLVILISTA_DIST))
 
 export default router
