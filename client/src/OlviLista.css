@@ -74,7 +74,7 @@ h1, h2 {
 .Editor {
     display: flex;
     flex-direction: column;
-    max-width: 660px;
+    max-width: 360px;
     align-items: center;
     margin-left: auto;
     margin-right: auto;
@@ -104,8 +104,8 @@ h1, h2 {
 
 .Editor .Image img {
     border-radius: 15px;
-    max-width: 600px;
-    max-height: 600px;
+    max-width: 340px;
+    max-height: 340px;
 }
 
 .Editor input, textarea {
@@ -137,7 +137,7 @@ h1, h2 {
 
 h1 {
     font-variant: small-caps;
-    font-size: 80pt;
+    font-size: 70pt;
     font-family: 'Rubik Moonrocks', cursive;
     margin: 0;
 

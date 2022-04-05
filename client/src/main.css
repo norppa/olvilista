@@ -1,5 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik+Moonrocks&display=swap');
 
+@media all and (max-width:1024px) {
+    selector:after {
+        content: '';
+        width: 100%;
+        height: 100%;
+        background-position: inherit;
+        background-image: inherit;
+        background-size: inherit;
+        background-attachment: inherit;
+        background-repeat: inherit;
+        position: fixed;
+        top: 0;
+        z-index: -1;
+    }
+}
+
 html {
     box-sizing: border-box;
     background-image: url('./assets/background3.jpg');
